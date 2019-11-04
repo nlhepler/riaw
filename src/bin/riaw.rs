@@ -4,7 +4,7 @@ use failure::Error;
 use minifb::{Key, Window, WindowOptions};
 
 use riaw::prelude::*;
-use riaw::random_spheres::{skybox, world};
+use riaw::scenes::random_spheres::{skybox, world};
 
 const WIDTH: usize = 1200;
 const HEIGHT: usize = 600;

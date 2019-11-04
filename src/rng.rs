@@ -1,12 +1,16 @@
 use std::cell::UnsafeCell;
 use std::ptr::NonNull;
 
-pub use rand::Rng;
+pub use rand::{rngs::OsRng, Rng, RngCore, SeedableRng};
 
 type FastRng = rand_pcg::Pcg64Mcg;
 
 thread_local!(
-    pub static THREAD_RNG_KEY: UnsafeCell<FastRng> = { UnsafeCell::new(FastRng::new(0xDEADBEEF)) };
+    pub static THREAD_RNG_KEY: UnsafeCell<FastRng> = {
+        let mut seed = [0u8; 16];
+        OsRng.fill_bytes(&mut seed[..]);
+        UnsafeCell::new(FastRng::from_seed(seed))
+    };
 );
 
 pub struct ThreadRng {
@@ -19,7 +23,7 @@ pub fn thread_rng() -> ThreadRng {
     ThreadRng { rng }
 }
 
-impl rand::RngCore for ThreadRng {
+impl RngCore for ThreadRng {
     #[inline(always)]
     fn next_u32(&mut self) -> u32 {
         unsafe { self.rng.as_mut().next_u32() }

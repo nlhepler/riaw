@@ -21,7 +21,7 @@ pub fn world() -> Vec<Box<dyn Hittable + Sync>> {
             let mat = randf();
             let center = vec3![a as f32 + 0.9 * randf(), 0.2, b as f32 + 0.9 * randf()];
             if (center - vec3![4, 0.2, 0]).len() > 0.9 {
-                if mat < 0.8 {
+                if mat < 0.5 {
                     result.push(Sphere::new(
                         center,
                         0.2,
@@ -31,7 +31,7 @@ pub fn world() -> Vec<Box<dyn Hittable + Sync>> {
                             randf() * randf()
                         ]),
                     ));
-                } else if mat < 0.95 {
+                } else if mat < 0.83 {
                     result.push(Sphere::new(
                         center,
                         0.2,

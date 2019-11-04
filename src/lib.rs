@@ -7,7 +7,7 @@ mod sphere;
 mod tracer;
 mod vec3;
 
-pub mod random_spheres;
+pub mod scenes;
 
 use rng::Rng;
 use vec3::Vec3;
