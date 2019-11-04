@@ -1,6 +1,6 @@
 [package]
 name = "riaw"
-version = "0.1.0"
+version = "0.1.2"
 authors = ["Lance Hepler <lhepler@pacb.com>"]
 edition = "2018"
 
@@ -9,6 +9,6 @@ edition = "2018"
 [dependencies]
 failure = "^0.1"
 minifb = "^0.13"
-png = "^0.15"
 rand = "^0.7"
+rand_pcg = "^0.2"
 rayon = "^1.2"

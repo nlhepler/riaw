@@ -1,4 +1,4 @@
-use rand::Rng;
+use crate::prelude::{thread_rng, Rng};
 
 use crate::prelude::{
     random_in_unit_sphere, reflect, refract, schlick, vec3, HitRecord, Ray, Vec3,
@@ -74,7 +74,7 @@ impl Material for Dielectric {
         };
 
         let scattered = if let Some(refracted) = refract(r.direction, outward_normal, ni_over_nt) {
-            let mut rng = rand::thread_rng();
+            let mut rng = thread_rng();
             let reflect_prob = schlick(cosine, self.refractive_index);
             if rng.gen::<f32>() < reflect_prob {
                 reflected

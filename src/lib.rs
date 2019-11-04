@@ -2,14 +2,18 @@ mod camera;
 mod hittable;
 mod material;
 mod ray;
+mod rng;
 mod sphere;
+mod tracer;
 mod vec3;
 
-use rand::Rng;
+pub mod random_spheres;
+
+use rng::Rng;
 use vec3::Vec3;
 
 pub fn random_in_unit_disk() -> Vec3 {
-    let mut rng = rand::thread_rng();
+    let mut rng = rng::thread_rng();
     loop {
         let p = 2.0 * vec3![rng.gen::<f32>(), rng.gen::<f32>(), 0] - vec3![1, 1, 0];
         if p.squared_len() < 1.0 {
@@ -19,7 +23,7 @@ pub fn random_in_unit_disk() -> Vec3 {
 }
 
 pub fn random_in_unit_sphere() -> Vec3 {
-    let mut rng = rand::thread_rng();
+    let mut rng = rng::thread_rng();
     loop {
         let p = 2.0 * vec3![rng.gen::<f32>(), rng.gen::<f32>(), rng.gen::<f32>()] - Vec3::ones();
         if p.squared_len() < 1.0 {
@@ -54,7 +58,9 @@ pub mod prelude {
     pub use super::hittable::{HitRecord, Hittable};
     pub use super::material::{Dielectric, Lambertian, Material, Metal};
     pub use super::ray::Ray;
+    pub use super::rng::{thread_rng, Rng};
     pub use super::sphere::Sphere;
+    pub use super::tracer::Tracer;
     pub use super::vec3;
     pub use super::vec3::Vec3;
     pub use super::{random_in_unit_disk, random_in_unit_sphere, reflect, refract, schlick};

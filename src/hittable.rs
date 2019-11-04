@@ -18,23 +18,24 @@ impl<'a> HitRecord<'a> {
     }
 }
 
-pub trait Hittable<'a> {
-    fn hit(self, r: &Ray, tmin: f32, tmax: f32) -> Option<HitRecord<'a>>;
+pub trait Hittable {
+    fn hit(&self, r: &Ray, tmin: f32, tmax: f32) -> Option<HitRecord<'_>>;
+    fn into_box(self) -> Box<dyn Hittable + Sync>;
 }
 
-impl<'a, T, U> Hittable<'a> for U
-where
-    T: Hittable<'a>,
-    U: IntoIterator<Item = T>,
-{
-    fn hit(self, r: &Ray, tmin: f32, mut tmax: f32) -> Option<HitRecord<'a>> {
+impl Hittable for Vec<Box<dyn Hittable + Sync>> {
+    fn hit(&self, r: &Ray, tmin: f32, mut tmax: f32) -> Option<HitRecord<'_>> {
         let mut result = None;
-        for h in self.into_iter() {
+        for h in self.iter() {
             if let Some(hit) = h.hit(r, tmin, tmax) {
                 tmax = hit.t;
                 result = Some(hit);
             }
         }
         result
+    }
+
+    fn into_box(self) -> Box<dyn Hittable + Sync> {
+        Box::new(self) as Box<dyn Hittable + Sync>
     }
 }

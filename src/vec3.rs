@@ -26,12 +26,29 @@ impl Vec3 {
         (255.0 * v).min(255.0) as u8
     }
 
+    pub fn from_u8(v: u8) -> f32 {
+        v as f32 / 255.0
+    }
+
     pub fn to_rgb(&self) -> [u8; 3] {
         [
             Self::to_u8(self.x),
             Self::to_u8(self.y),
             Self::to_u8(self.z),
         ]
+    }
+
+    pub fn from_argb(v: u32) -> Self {
+        let x = Self::from_u8(((v >> 16) & 0xff) as u8);
+        let y = Self::from_u8(((v >> 8) & 0xff) as u8);
+        let z = Self::from_u8((v & 0xff) as u8);
+        Vec3 { x, y, z }
+    }
+
+    pub fn to_argb(&self) -> u32 {
+        ((Self::to_u8(self.x) as u32) << 16)
+            | ((Self::to_u8(self.y) as u32) << 8)
+            | (Self::to_u8(self.z) as u32)
     }
 
     pub fn cross(&self, rhs: &Vec3) -> Vec3 {

@@ -16,8 +16,8 @@ impl Sphere {
     }
 }
 
-impl<'a> Hittable<'a> for &'a Sphere {
-    fn hit(self, r: &Ray, tmin: f32, tmax: f32) -> Option<HitRecord<'a>> {
+impl Hittable for Sphere {
+    fn hit(&self, r: &Ray, tmin: f32, tmax: f32) -> Option<HitRecord<'_>> {
         let oc = r.origin - self.center;
         let a = r.direction.dot(&r.direction);
         let b = oc.dot(&r.direction);
@@ -45,5 +45,9 @@ impl<'a> Hittable<'a> for &'a Sphere {
         } else {
             None
         }
+    }
+
+    fn into_box(self) -> Box<dyn Hittable + Sync> {
+        Box::new(self) as Box<dyn Hittable + Sync>
     }
 }
