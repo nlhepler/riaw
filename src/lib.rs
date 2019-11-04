@@ -59,7 +59,7 @@ pub mod prelude {
     pub use super::material::{Dielectric, Lambertian, Material, Metal};
     pub use super::ray::Ray;
     pub use super::rng::{thread_rng, Rng};
-    pub use super::sphere::Sphere;
+    pub use super::sphere::{MovingSphere, Sphere};
     pub use super::tracer::Tracer;
     pub use super::vec3;
     pub use super::vec3::Vec3;

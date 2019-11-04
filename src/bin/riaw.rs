@@ -32,6 +32,8 @@ fn main() -> Result<(), Error> {
         WIDTH as f32 / HEIGHT as f32,
         aperature,
         dist_to_focus,
+        0.0,
+        1.0,
     );
     let scene = world();
     let sampler = Tracer::new(camera, scene, skybox);
