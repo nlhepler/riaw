@@ -2,12 +2,14 @@ use rayon::prelude::*;
 
 use crate::prelude::{thread_rng, Camera, Hittable, Ray, Rng, Vec3};
 
+const MAX_DEPTH: usize = 50;
+
 pub fn color<F>(r: &Ray, world: &Vec<Box<dyn Hittable + Sync>>, skybox: F, depth: usize) -> Vec3
 where
     F: Fn(&Ray) -> Vec3,
 {
     if let Some(hit) = world.hit(r, 1e-3, std::f32::MAX) {
-        if depth >= 50 {
+        if depth >= MAX_DEPTH {
             return Vec3::zeros();
         }
         return if let Some((attenuation, scattered)) = hit.material.scatter(r, &hit) {
@@ -24,6 +26,10 @@ fn split_scanlines<'a>(
     width: usize,
     height: usize,
 ) -> Vec<(usize, &'a mut [u32])> {
+    if buffer.len() < width * height {
+        panic!("rendering buffer is insufficiently sized");
+    }
+    buffer = &mut buffer[0..width * height];
     let mut res = vec![];
     for y in (0..height).rev() {
         if buffer.len() <= width {
