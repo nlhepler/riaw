@@ -23,11 +23,12 @@ impl Vec3 {
     }
 
     pub fn to_u8(v: f32) -> u8 {
-        (255.0 * v).min(255.0) as u8
+        (256.0 * v).min(255.0) as u8
     }
 
     pub fn from_u8(v: u8) -> f32 {
-        v as f32 / 255.0
+        // 0.5 / 256.
+        v as f32 / 256.0 + 0.001953125
     }
 
     pub fn to_rgb(&self) -> [u8; 3] {
@@ -73,6 +74,26 @@ impl Vec3 {
 
     pub fn sqrt(&self) -> Vec3 {
         Vec3::new(self.x.sqrt(), self.y.sqrt(), self.z.sqrt())
+    }
+
+    pub fn powi(&self, i: i32) -> Vec3 {
+        Vec3::new(self.x.powi(i), self.y.powi(i), self.z.powi(i))
+    }
+
+    pub fn to_array(&self) -> [f32; 3] {
+        [self.x, self.y, self.z]
+    }
+}
+
+impl std::ops::Index<usize> for Vec3 {
+    type Output = f32;
+    fn index(&self, i: usize) -> &f32 {
+        match i {
+            0 => &self.x,
+            1 => &self.y,
+            2 => &self.z,
+            _ => panic!("axis out-of-bounds"),
+        }
     }
 }
 

@@ -22,7 +22,7 @@ pub fn world() -> Vec<Box<dyn Hittable + Sync>> {
             let mat = randf();
             let center = vec3![a as f32 + 0.9 * randf(), 0.2, b as f32 + 0.9 * randf()];
             if (center - vec3![4, 0.2, 0]).len() > 0.9 {
-                if mat < 0.5 {
+                if mat < 0.8 {
                     result.push(
                         MovingSphere::new(
                             center,
@@ -38,7 +38,7 @@ pub fn world() -> Vec<Box<dyn Hittable + Sync>> {
                         )
                         .into_box(),
                     );
-                } else if mat < 0.83 {
+                } else if mat < 0.95 {
                     result.push(
                         Sphere::new(
                             center,
@@ -61,10 +61,23 @@ pub fn world() -> Vec<Box<dyn Hittable + Sync>> {
         }
     }
 
+    result.push(
+        Sphere::new(
+            vec3![-4.2, 1.2, 0],
+            1.2,
+            Lambertian::new(vec3![0.4, 0.2, 0.1]),
+        )
+        .into_box(),
+    );
     result.push(Sphere::new(vec3![0, 1, 0], 1.0, Dielectric::new(1.5)).into_box());
-    result
-        .push(Sphere::new(vec3![-4, 1, 0], 1.0, Lambertian::new(vec3![0.4, 0.2, 0.1])).into_box());
-    result.push(Sphere::new(vec3![4, 1, 0], 1.0, Metal::new(vec3![0.7, 0.6, 0.5], 0.0)).into_box());
+    result.push(
+        Sphere::new(
+            vec3![3.8, 0.8, 0],
+            0.8,
+            Metal::new(vec3![0.7, 0.6, 0.5], 0.0),
+        )
+        .into_box(),
+    );
 
     result
 }

@@ -1,4 +1,4 @@
-use crate::prelude::{HitRecord, Hittable, Material, Ray, Vec3};
+use crate::prelude::{vec3, HitRecord, Hittable, Material, Ray, Vec3, AABB};
 
 pub struct Sphere {
     pub center: Vec3,
@@ -47,6 +47,13 @@ impl Hittable for Sphere {
         }
     }
 
+    fn bounding_box(&self, _t0: f32, _t1: f32) -> Option<AABB> {
+        Some(AABB::new(
+            self.center - vec3![self.radius, self.radius, self.radius],
+            self.center + vec3![self.radius, self.radius, self.radius],
+        ))
+    }
+
     fn into_box(self) -> Box<dyn Hittable + Sync> {
         Box::new(self) as Box<dyn Hittable + Sync>
     }
@@ -81,8 +88,9 @@ impl MovingSphere {
     }
 
     pub fn center(&self, time: f32) -> Vec3 {
-        return self.center0
-            + (time - self.time0) / (self.time1 - self.time0) * (self.center1 - self.center0);
+        let slope = self.center1 - self.center0;
+        let x = (time.min(self.time1) - self.time0) / (self.time1 - self.time0);
+        self.center0 + slope * x
     }
 }
 
@@ -109,12 +117,24 @@ impl Hittable for MovingSphere {
             };
             t.map(|t| {
                 let p = r.point_at(t);
-                let normal = p - self.center(r.time) / self.radius;
+                let normal = (p - self.center(r.time)) / self.radius;
                 HitRecord::new(t, p, normal, self.material.as_ref())
             })
         } else {
             None
         }
+    }
+
+    fn bounding_box(&self, t0: f32, t1: f32) -> Option<AABB> {
+        let box0 = AABB::new(
+            self.center(t0) - vec3![self.radius, self.radius, self.radius],
+            self.center(t0) + vec3![self.radius, self.radius, self.radius],
+        );
+        let box1 = AABB::new(
+            self.center(t1) - vec3![self.radius, self.radius, self.radius],
+            self.center(t1) + vec3![self.radius, self.radius, self.radius],
+        );
+        Some(AABB::surrounding_box(box0, box1))
     }
 
     fn into_box(self) -> Box<dyn Hittable + Sync> {

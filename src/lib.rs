@@ -1,3 +1,5 @@
+mod aabb;
+mod bvh;
 mod camera;
 mod hittable;
 mod material;
@@ -54,6 +56,8 @@ pub fn schlick(cosine: f32, refractive_index: f32) -> f32 {
 }
 
 pub mod prelude {
+    pub use super::aabb::AABB;
+    pub use super::bvh::BVH;
     pub use super::camera::Camera;
     pub use super::hittable::{HitRecord, Hittable};
     pub use super::material::{Dielectric, Lambertian, Material, Metal};

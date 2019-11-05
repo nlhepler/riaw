@@ -7,8 +7,10 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+env_logger = "^0.7"
 failure = "^0.1"
-minifb = "^0.13"
+log = "^0.4"
+minifb = { git = "https://github.com/nlhepler/rust_minifb.git", branch = "lh/hidpi" }
 rand = "^0.7"
 rand_pcg = "^0.2"
 rayon = "^1.2"

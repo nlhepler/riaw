@@ -1,4 +1,4 @@
-use crate::prelude::{Material, Ray, Vec3};
+use crate::prelude::{Material, Ray, Vec3, AABB};
 
 pub struct HitRecord<'a> {
     pub t: f32,
@@ -20,6 +20,7 @@ impl<'a> HitRecord<'a> {
 
 pub trait Hittable {
     fn hit(&self, r: &Ray, tmin: f32, tmax: f32) -> Option<HitRecord<'_>>;
+    fn bounding_box(&self, t0: f32, t1: f32) -> Option<AABB>;
     fn into_box(self) -> Box<dyn Hittable + Sync>;
 }
 
@@ -33,6 +34,10 @@ impl Hittable for Vec<Box<dyn Hittable + Sync>> {
             }
         }
         result
+    }
+
+    fn bounding_box(&self, _t0: f32, _t1: f32) -> Option<AABB> {
+        unimplemented!()
     }
 
     fn into_box(self) -> Box<dyn Hittable + Sync> {
